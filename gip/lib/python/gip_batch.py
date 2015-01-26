@@ -35,7 +35,7 @@ def getCEImpl(cp):
         ceImpl = 'CREAM'
         ceImplVersion = getOSGVersion(cp)
     if cp_getBoolean(cp, 'osgce', 'enabled', False):
-        ceImpl = 'HTCondor'
+        ceImpl = 'OSGCE'
         ceImplVersion = getOSGVersion(cp)
     return (ceImpl, ceImplVersion)
 
