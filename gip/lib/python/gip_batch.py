@@ -12,6 +12,8 @@ def buildCEUniqueID(cp, ce_name, batch, queue):
     ce_prefix = 'jobmanager'
     if cp_getBoolean(cp, 'cream', 'enabled', False):
         ce_prefix = 'cream'
+    if cp_getBoolean(cp, 'htcondor', 'enabled', False):
+        ce_prefix = 'htcondor'    
 
     port = getPort(cp)
     ce_unique_id = '%s:%d/%s-%s-%s' % (ce_name, port, ce_prefix, batch, queue)
@@ -20,6 +22,8 @@ def buildCEUniqueID(cp, ce_name, batch, queue):
 def getGramVersion(cp):
     gramVersion = '\n' + 'GlueCEInfoGRAMVersion: 5.0'
     if cp_getBoolean(cp, 'cream', 'enabled', False):    
+        gramVersion = ''
+    if cp_getBoolean(cp, 'htcondor', 'enabled', False):    
         gramVersion = ''
 
     return gramVersion
@@ -30,12 +34,17 @@ def getCEImpl(cp):
     if cp_getBoolean(cp, 'cream', 'enabled', False):
         ceImpl = 'CREAM'
         ceImplVersion = getOSGVersion(cp)
+    if cp_getBoolean(cp, 'htcondor', 'enabled', False):
+        ceImpl = 'HTCondor'
+        ceImplVersion = getOSGVersion(cp)
     return (ceImpl, ceImplVersion)
 
 def getPort(cp):
     port = 2119
     if cp_getBoolean(cp, 'cream', 'enabled', False):
         port = 8443
+    if cp_getBoolean(cp, 'htcondor', 'enabled', False):
+        port = 9619
     return port
     
 def buildContactString(cp, batch, queue, ce_unique_id, log):
