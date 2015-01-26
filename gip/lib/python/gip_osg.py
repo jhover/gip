@@ -25,6 +25,7 @@ dcache_sec = 'dcache'
 lsf_sec = 'LSF'
 cream_sec = 'CREAM'
 slurm_sec = 'SLURM'
+osgce_sec = 'OSGCE'
 
 default_osg_ress_servers = \
     "https://osg-ress-1.fnal.gov:8443/ig/services/CEInfoCollector[OLD_CLASSAD]"
@@ -288,6 +289,10 @@ def configOsg(cp):
     # [CREAM]
     if cp2.has_section(cream_sec) and cp2.has_option(cream_sec, 'enabled'):
         __write_config(cream_sec, 'enabled', cream, 'enabled')
+
+    # [OSGCE]
+    if cp2.has_section(osgce_sec) and cp2.has_option(osgce_sec, 'enabled'):
+        __write_config(osgce_sec, 'enabled', osgce, 'enabled')
 
     # [Misc Services]
     glexec_enabled = False
