@@ -2,7 +2,7 @@
 Common functions for GIP batch system providers and plugins.
 """
 
-from gip_common import cp_getBoolean, cp_get, cp_getList, cp_getInt
+from gip_common import cp_getBoolean, cp_get, cp_getList, cp_getInt, vdtDir
 from gip_cluster import getOSGVersion
 from gip_sections import ce
 
@@ -27,7 +27,40 @@ def getGramVersion(cp):
         gramVersion = ''
 
     return gramVersion
-        
+
+def getHTCondorCEVersion(cp):
+    """
+    Returns the running version of the HTCondor CE
+    Copied from getOSGVersion() in gip_cluster.py
+    """
+    htcondorce_ver_backup = cp_get(cp, "ce", "htcondorce_version", "1.8")
+    htcondorce_version_script = cp_get(cp, "gip", "htcondorce_version_script",
+        "")
+    htcondorce_ver = ''
+
+    if len(htcondorce_version_script) == 0:
+        htcondorce_version_script = vdtDir('$VDT_LOCATION/condor_ce_config_val',
+                                    '/usr/bin/condor_ce_config_val')
+
+        htcondorce_version_script = os.path.expandvars(osg_version_script)
+
+        if not os.path.exists(htcondorce_version_script):
+            htcondorce_version_script = os.path.expandvars("$VDT_LOCATION/osg/bin/" \
+                "osg-version")
+
+    if os.path.exists(htcondorce_version_script):
+        try:
+            htcondorce_version_script += " HTCondorCEVersion"
+            htcondorce_ver = runCommand(htcondorce_version_script).read().strip()
+            htcondorce_ver = htcondorce_ver.replace('"','')
+        except Exception, e:
+            log.exception(e)
+
+    if len(osg_ver) == 0:
+        htcondorce_ver = htcondorce_ver_backup
+    return htcondorce_ver
+    
+      
 def getCEImpl(cp):
     ceImpl = 'Globus'
     ceImplVersion = cp_get(cp, ce, 'globus_version', '4.0.6')    
@@ -36,7 +69,7 @@ def getCEImpl(cp):
         ceImplVersion = getOSGVersion(cp)
     if cp_getBoolean(cp, 'htcondorce', 'enabled', False):
         ceImpl = 'HTCondorCE'
-        ceImplVersion = getOSGVersion(cp)
+        ceImplVersion = getHTCondorCEVersion(cp)
     return (ceImpl, ceImplVersion)
 
 def getPort(cp):
