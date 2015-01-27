@@ -5,6 +5,7 @@ Common functions for GIP batch system providers and plugins.
 from gip_common import cp_getBoolean, cp_get, cp_getList, cp_getInt, vdtDir
 from gip_cluster import getOSGVersion
 from gip_sections import ce
+import os
 
 __author__ = "Burt Holzman"
 
