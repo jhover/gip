@@ -59,7 +59,7 @@ def getHTCondorCEVersion(cp):
         except Exception, e:
             log.exception(e)
 
-    if len(osg_ver) == 0:
+    if len(htcondorce_ver) == 0:
         htcondorce_ver = htcondorce_ver_backup
     return htcondorce_ver
     
