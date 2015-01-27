@@ -6,6 +6,7 @@ from gip_common import cp_getBoolean, cp_get, cp_getList, cp_getInt, vdtDir
 from gip_cluster import getOSGVersion
 from gip_sections import ce
 import os
+import logging
 
 __author__ = "Burt Holzman"
 
@@ -34,6 +35,7 @@ def getHTCondorCEVersion(cp):
     Returns the running version of the HTCondor CE
     Copied from getOSGVersion() in gip_cluster.py
     """
+    log = logging.getLogger()
     htcondorce_ver_backup = cp_get(cp, "ce", "htcondorce_version", "1.8")
     htcondorce_version_script = cp_get(cp, "gip", "htcondorce_version_script",
         "")
